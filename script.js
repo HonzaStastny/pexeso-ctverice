@@ -105,6 +105,62 @@ function klik(i) {
     karta.style.color = "black";
     otevrene.push(i);
 
+    if (otevrene.length === 4) {
+        zkontroluj();
+    }
+}
+
+/**
+* AI Generated
+* Model: Claude Sonnet 5.5
+*/
+function zkontroluj() {
+    tahy++;
+    document.getElementById("tahy").textContent = String(tahy);
+
+    let stejne = true;
+    for (let j = 1; j < 4; j++) {
+        if (karty[otevrene[j]] !== karty[otevrene[0]]) {
+            stejne = false;
+        }
+    }
+
+    if (stejne === true) {
+        // správně
+        for (let j = 0; j < 4; j++) {
+            hotove[otevrene[j]] = true;
+            document.getElementById("karta" + otevrene[j]).style.backgroundColor = "#86efac";
+        }
+        nalezeno = nalezeno + 4;
+        otevrene = [];
+        if (nalezeno === karty.length) {
+            konec();
+        }
+    } else {
+        // špatně
+        zamek = true;
+        for (let j = 0; j < 4; j++) {
+            document.getElementById("karta" + otevrene[j]).style.backgroundColor = "#fca5a5";
+        }
+        setTimeout(function () {
+            for (let j = 0; j < 4; j++) {
+                const karta = document.getElementById("karta" + otevrene[j]);
+                karta.textContent = "?";
+                karta.style.backgroundColor = "#4f46e5";
+                karta.style.color = "white";
+            }
+            otevrene = [];
+            zamek = false;
+        }, 1000);
+    }
+}
+
+// konec hry
+function konec() {
+    clearInterval(casovac);
+    document.getElementById("konecCas").textContent = formatCasu(cas);
+    document.getElementById("konecTahy").textContent = String(tahy);
+    document.getElementById("okno").style.display = "block";
 }
 
 // start hry
